@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LMS Prompt Kilat - Member Area Premium</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Poppins', 'sans-serif'] },
+                    colors: {
+                        brand: { 50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb', 900: '#1e3a8a' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .fade-in { animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .shake { animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both; }
+        @keyframes shake { 10%, 90% { transform: translate3d(-1px, 0, 0); } 20%, 80% { transform: translate3d(2px, 0, 0); } 30%, 50%, 70% { transform: translate3d(-4px, 0, 0); } 40%, 60% { transform: translate3d(4px, 0, 0); } }
+        
+        body {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased min-h-screen flex flex-col">
+
+    <!-- ==================== LOGIN SCREEN ==================== -->
+    <div id="login-screen" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-brand-900 to-brand-600 px-4">
+        <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md relative overflow-hidden">
+            <div class="absolute -top-16 -right-16 w-32 h-32 bg-brand-100 rounded-full opacity-50"></div>
+            
+            <div class="text-center mb-8 relative z-10">
+                <div class="inline-block bg-brand-100 p-4 rounded-full mb-4">
+                    <i class="fa-solid fa-bolt text-4xl text-brand-600"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-800">Login Member Kilat</h2>
+                <p class="text-sm text-gray-500 mt-2 leading-relaxed">Terimakasih sudah membeli akses kelas Prompt Kilat ini<br>masukkan hak akses pembelian anda disini.</p>
+            </div>
+
+            <form id="login-form" class="space-y-5 relative z-10">
+                <div id="error-msg" class="hidden bg-red-100 border-l-4 border-red-500 text-red-700 p-3 text-sm rounded shadow-sm">
+                    <i class="fa-solid fa-triangle-exclamation mr-1"></i> Username atau Password salah!
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Username</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fa-solid fa-user text-gray-400"></i>
+                        </div>
+                        <input type="text" id="username" class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500" placeholder="Masukkan username" required>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fa-solid fa-lock text-gray-400"></i>
+                        </div>
+                        <input type="password" id="password" class="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500" placeholder="••••••••" required>
+                        <!-- Tombol Mata untuk Tampilkan Password -->
+                        <button type="button" id="togglePassword" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-brand-600 transition">
+                            <i class="fa-solid fa-eye" id="eyeIcon"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold py-3 rounded-lg shadow-md transition duration-300 transform hover:-translate-y-0.5">
+                    Mulai Belajar <i class="fa-solid fa-arrow-right ml-2"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- ==================== DASHBOARD SCREEN ==================== -->
+    <div id="dashboard-screen" class="hidden flex-col min-h-screen w-full">
+        
+        <!-- Navbar -->
+        <nav class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-16">
+                    <div class="flex items-center">
+                        <i class="fa-solid fa-bolt text-yellow-500 text-2xl mr-2"></i>
+                        <span class="font-bold text-xl text-gray-800 tracking-tight">Prompt<span class="text-brand-600">Kilat</span></span>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <span class="text-sm font-medium text-gray-600 hidden md:block">Halo, Member!</span>
+                        <button onclick="logout()" class="text-red-500 hover:text-red-700 hover:bg-red-50 px-3 py-2 rounded-md text-sm font-medium transition">
+                            <i class="fa-solid fa-arrow-right-from-bracket mr-1"></i> Keluar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full fade-in">
+            
+            <!-- Hero Section -->
+            <div class="bg-brand-900 rounded-2xl p-8 mb-8 text-white shadow-xl">
+                <h1 class="text-3xl md:text-4xl font-bold mb-3">Assalamualaikum Warahmatullahi Wabarakatuh 👋</h1>
+                <p class="text-lg text-brand-100 max-w-3xl leading-relaxed">
+                    Terimakasih sudah join di <strong>Kelas Prompt Kilat</strong>. Selamat bergabung ya temen-temen, semoga materi dan tools ini bermanfaat untuk meningkatkan produktivitas konten Anda.
+                </p>
+            </div>
+
+            <!-- Rules & Disclaimer -->
+            <div class="bg-red-50 border border-red-200 rounded-xl p-6 mb-10 shadow-sm flex flex-col md:flex-row items-start md:items-center gap-4">
+                <div class="bg-red-100 p-3 rounded-full text-red-600 shrink-0">
+                    <i class="fa-solid fa-triangle-exclamation text-2xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-red-800 mb-1">NOTED / PERATURAN AKSES</h3>
+                    <p class="text-red-700 text-sm md:text-base leading-relaxed">
+                        Akses Kelas ini, Tools (Link Prompt), Tutorial, dll. <strong>Semuanya penggunaan hanya untuk pribadi ya</strong>, tidak halal & tidak berkah jika disebarluaskan / dijual kembali secara bebas tanpa izin pemilik. <br>
+                        Jika ingin menjual kelas dan akses ini bisa daftar gratis jadi Affiliate <strong>Hubungi 085755643820 agustriian</strong>.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Content Grid Layout -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                <!-- KOLOM KIRI: MATERI UTAMA & BONUS VIDEO AI -->
+                <div class="lg:col-span-2 space-y-10">
+                    
+                    <!-- KELAS UTAMA REKAMAN ZOOM -->
+                    <section>
+                        <div class="flex items-center mb-6">
+                            <div class="bg-brand-100 p-2 rounded-lg text-brand-600 mr-3"><i class="fa-solid fa-video"></i></div>
+                            <h2 class="text-2xl font-bold text-gray-800">Rekaman Kelas (Video Record)</h2>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <!-- Video 1 -->
+                            <a href="https://www.youtube.com/watch?v=bW1ZDzxJpXw" target="_blank" class="block bg-white rounded-xl shadow-sm hover:shadow-lg border border-gray-100 overflow-hidden transition-all duration-300 group">
+                                <div class="w-full aspect-video relative bg-gray-100">
+                                    <img src="https://img.youtube.com/vi/bW1ZDzxJpXw/hqdefault.jpg" alt="Thumbnail Record 1" class="w-full h-full object-cover">
+                                    <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-20 group-hover:bg-opacity-40 transition-all duration-300">
+                                        <i class="fa-brands fa-youtube text-6xl text-red-600 drop-shadow-md group-hover:scale-110 transition-transform duration-300"></i>
+                                    </div>
+                                </div>
+                                <div class="p-5">
+                                    <h4 class="font-bold text-gray-800 group-hover:text-brand-600 transition">RECORD 1 LIVE PRAKTEK</h4>
+                                </div>
+                            </a>
+
+                            <!-- Video 2 -->
+                            <a href="https://www.youtube.com/live/MTlImUFMx98?si=efi6EDnJya3xqEhW" target="_blank" class="block bg-white rounded-xl shadow-sm hover:shadow-lg border border-gray-100 overflow-hidden transition-all duration-300 group">
+                                <div class="w-full aspect-video relative bg-gray-100">
+                                    <img src="https://img.youtube.com/vi/MTlImUFMx98/hqdefault.jpg" alt="Thumbnail Record 2" class="w-full h-full object-cover">
+                                    <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-20 group-hover:bg-opacity-40 transition-all duration-300">
+                                        <i class="fa-brands fa-youtube text-6xl text-red-600 drop-shadow-md group-hover:scale-110 transition-transform duration-300"></i>
+                                    </div>
+                                </div>
+                                <div class="p-5">
+                                    <h4 class="font-bold text-gray-800 group-hover:text-brand-600 transition">RECORD 2 LIVE PRAKTEK</h4>
+                                </div>
+                            </a>
+
+                            <!-- Video 3 -->
+                            <a href="https://www.youtube.com/watch?v=vTw-1nkj-lo" target="_blank" class="block bg-white rounded-xl shadow-sm hover:shadow-lg border border-gray-100 overflow-hidden transition-all duration-300 group sm:col-span-2 md:col-span-1">
+                                <div class="w-full aspect-video relative bg-gray-100">
+                                    <img src="https://img.youtube.com/vi/vTw-1nkj-lo/hqdefault.jpg" alt="Thumbnail Record 3" class="w-full h-full object-cover">
+                                    <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-20 group-hover:bg-opacity-40 transition-all duration-300">
+                                        <i class="fa-brands fa-youtube text-6xl text-red-600 drop-shadow-md group-hover:scale-110 transition-transform duration-300"></i>
+                                    </div>
+                                </div>
+                                <div class="p-5">
+                                    <h4 class="font-bold text-gray-800 group-hover:text-brand-600 transition">RECORD 3 LIVE PRAKTEK</h4>
+                                </div>
+                            </a>
+                        </div>
+                    </section>
+
+                    <!-- BONUS KELAS: TUTORIAL VIDEO AI -->
+                    <section>
+                        <div class="flex items-center mb-6">
+                            <div class="bg-purple-100 p-2 rounded-lg text-purple-600 mr-3"><i class="fa-solid fa-clapperboard"></i></div>
+                            <h2 class="text-2xl font-bold text-gray-800">Tutorial AI Editing & Omni Flow</h2>
+                        </div>
+                        
+                        <!-- AI Iklan Omni (Featured YouTube Card) -->
+                        <div class="mb-6">
+                            <a href="https://youtu.be/l2XKeotiMzk" target="_blank" class="block bg-white rounded-xl shadow-sm hover:shadow-lg border border-gray-100 overflow-hidden transition-all duration-300 group">
+                                <div class="w-full aspect-video md:h-[350px] relative bg-gray-100">
+                                    <img src="https://img.youtube.com/vi/l2XKeotiMzk/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/l2XKeotiMzk/hqdefault.jpg';" alt="Thumbnail AI Iklan" class="w-full h-full object-cover">
+                                    <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-20 group-hover:bg-opacity-40 transition-all duration-300">
+                                        <i class="fa-brands fa-youtube text-7xl text-red-600 drop-shadow-lg group-hover:scale-110 transition-transform duration-300"></i>
+                                    </div>
+                                </div>
+                                <div class="p-6 border-l-4 border-green-500">
+                                    <div class="inline-block bg-green-100 text-green-800 text-xs px-2.5 py-1 rounded font-bold mb-2">KHUSUS MEMBER KILAT ✅</div>
+                                    <h4 class="font-bold text-gray-800 text-xl group-hover:text-green-600 transition mb-1">Tutorial Video AI Iklan (Promkil + Flow Omni)</h4>
+                                    <p class="text-sm text-gray-500">Langkah teknis mengoptimalkan iklan video pakai AI Prompt.</p>
+                                </div>
+                            </a>
+                        </div>
+
+                        <!-- Link Aplikasi Biasa -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                            <a href="https://labs.google/fx/tools/flow" target="_blank" class="bg-white p-5 rounded-xl shadow-sm hover:shadow-md border border-gray-100 transition group flex items-start gap-3">
+                                <div class="text-brand-500 text-xl"><i class="fa-brands fa-google"></i></div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800 text-sm group-hover:text-brand-600 transition">Akses Flow Google Labs</h4>
+                                    <p class="text-xs text-gray-500 mt-1">Buka web labs.google/fx untuk akses tools Omni secara gratis.</p>
+                                </div>
+                            </a>
+                            <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.labs.whisk" target="_blank" class="bg-white p-5 rounded-xl shadow-sm hover:shadow-md border border-gray-100 transition group flex items-start gap-3">
+                                <div class="text-brand-500 text-xl"><i class="fa-brands fa-google-play"></i></div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800 text-sm group-hover:text-brand-600 transition">Aplikasi Flow (Android)</h4>
+                                    <p class="text-xs text-gray-500 mt-1">Download aplikasi labs langsung dari Google Playstore.</p>
+                                </div>
+                            </a>
+                        </div>
+
+                        <!-- Kumpulan Tutorial YouTube (Grid Cards) -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            
+                            <a href="https://youtu.be/WwyapjyWQSQ" target="_blank" class="block bg-white rounded-xl shadow-sm hover:shadow-lg border border-gray-100 overflow-hidden transition-all duration-300 group">
+                                <div class="w-full aspect-video relative bg-gray-100">
+                                    <img src="https://img.youtube.com/vi/WwyapjyWQSQ/hqdefault.jpg" alt="Thumbnail Gerakin Gambar" class="w-full h-full object-cover">
+                                    <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-20 group-hover:bg-opacity-40 transition-all duration-300">
+                                        <i class="fa-brands fa-youtube text-5xl text-red-600 drop-shadow-md group-hover:scale-110 transition-transform duration-300"></i>
+                                    </div>
+                                </div>
+                                <div class="p-4">
+                                    <h4 class="font-bold text-gray-800 text-sm group-hover:text-red-600 transition">Tutorial Gerakin Gambar ke Video</h4>
+                                </div>
+                            </a>
+
+                            <a href="https://youtu.be/c69ts2VCm_E" target="_blank" class="block bg-white rounded-xl shadow-sm hover:shadow-lg border border-gray-100 overflow-hidden transition-all duration-300 group">
+                                <div class="w-full aspect-video relative bg-gray-100">
+                                    <img src="https://img.youtube.com/vi/c69ts2VCm_E/hqdefault.jpg" alt="Thumbnail Storyboard" class="w-full h-full object-cover">
+                                    <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-20 group-hover:bg-opacity-40 transition-all duration-300">
+                                        <i class="fa-brands fa-youtube text-5xl text-red-600 drop-shadow-md group-hover:scale-110 transition-transform duration-300"></i>
+                                    </div>
+                                </div>
+                                <div class="p-4">
+                                    <h4 class="font-bold text-gray-800 text-sm group-hover:text-red-600 transition">Tutorial Buat Video Storyboard</h4>
+                                </div>
+                            </a>
+
+                            <a href="https://youtube.com/live/ftFRpOgNcwQ?feature=share" target="_blank" class="block bg-white rounded-xl shadow-sm hover:shadow-lg border border-gray-100 overflow-hidden transition-all duration-300 group">
+                                <div class="w-full aspect-video relative bg-gray-100">
+                                    <img src="https://img.youtube.com/vi/ftFRpOgNcwQ/hqdefault.jpg" alt="Thumbnail Voiceover" class="w-full h-full object-cover">
+                                    <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-20 group-hover:bg-opacity-40 transition-all duration-300">
+                                        <i class="fa-brands fa-youtube text-5xl text-red-600 drop-shadow-md group-hover:scale-110 transition-transform duration-300"></i>
+                                    </div>
+                                </div>
+                                <div class="p-4">
+                                    <h4 class="font-bold text-gray-800 text-sm group-hover:text-red-600 transition">Tutorial Buat Voiceover (VO)</h4>
+                                </div>
+                            </a>
+
+                            <a href="https://youtube.com/live/yi_mf7TPEfk?feature=share" target="_blank" class="block bg-white rounded-xl shadow-sm hover:shadow-lg border border-gray-100 overflow-hidden transition-all duration-300 group">
+                                <div class="w-full aspect-video relative bg-gray-100">
+                                    <img src="https://img.youtube.com/vi/yi_mf7TPEfk/hqdefault.jpg" alt="Thumbnail Capcut" class="w-full h-full object-cover">
+                                    <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-20 group-hover:bg-opacity-40 transition-all duration-300">
+                                        <i class="fa-brands fa-youtube text-5xl text-red-600 drop-shadow-md group-hover:scale-110 transition-transform duration-300"></i>
+                                    </div>
+                                </div>
+                                <div class="p-4">
+                                    <h4 class="font-bold text-gray-800 text-sm group-hover:text-red-600 transition">Gabungin Video & VO di Capcut</h4>
+                                </div>
+                            </a>
+
+                        </div>
+                    </section>
+                </div>
+
+                <!-- KOLOM KANAN: TOOLS & PROFILE -->
+                <div class="space-y-8">
+                    
+                    <!-- PANDUAN SINGKAT -->
+                    <div class="bg-gradient-to-br from-brand-50 to-white rounded-xl shadow-md border border-brand-100 p-6">
+                        <h3 class="font-bold text-gray-800 mb-4 flex items-center text-lg">
+                            <i class="fa-solid fa-clipboard-list mr-2 text-brand-500"></i> Cara Penggunaan Tools
+                        </h3>
+                        <ol class="list-decimal list-inside text-sm text-gray-600 space-y-3 font-medium">
+                            <li>Buka Link Tools Premium di bawah</li>
+                            <li>Ketik awal chat <strong class="text-gray-800">halo / assalamualaikum</strong></li>
+                            <li>Akan dijawab asisten AI Promkil, lalu balas apa yang kakak inginkan</li>
+                            <li>Jika sudah diberikan prompt, silahkan <strong class="text-brand-600">copy promptnya</strong></li>
+                            <li>Generate gambarnya dengan AI Image Generator (Bisa Phokil / Gemini)</li>
+                        </ol>
+                        <a href="https://t.me/+vOgAwfLSbMI5YzM1" target="_blank" class="mt-5 flex items-center justify-center bg-blue-100 hover:bg-blue-200 text-blue-700 font-bold py-2.5 px-4 rounded-lg transition text-sm">
+                            <i class="fa-brands fa-telegram text-lg mr-2"></i> Tutorial & Contoh di Telegram
+                        </a>
+                    </div>
+
+                    <!-- TOOLS UTAMA SECTION -->
+                    <div class="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
+                        <div class="bg-gray-800 px-6 py-4">
+                            <h3 class="font-bold text-white flex items-center">
+                                <i class="fa-solid fa-toolbox mr-2 text-yellow-400"></i> Link PROMKIL
+                            </h3>
+                        </div>
+                        <div class="p-6 space-y-4">
+                            
+                            <!-- ChatGPT Tool -->
+                            <div class="bg-gray-50 rounded-lg p-4 border border-gray-200 hover:border-green-300 transition group">
+                                <h4 class="font-bold text-gray-800 text-sm mb-1 group-hover:text-green-600"><i class="fa-solid fa-robot text-green-500 mr-1"></i> Asisten Prompt Kilat (ChatGPT)</h4>
+                                <a href="https://chatgpt.com/g/g-693a3822944c81918104b11993227a6c-prompt-kilat" target="_blank" class="inline-flex items-center justify-center bg-green-600 hover:bg-green-700 text-white font-medium text-xs py-2 px-4 rounded transition w-full shadow-sm">
+                                    Buka ChatGPT Promkil <i class="fa-solid fa-arrow-up-right-from-bracket ml-1.5 text-[10px]"></i>
+                                </a>
+                            </div>
+
+                            <!-- Gemini Tool 1 -->
+                            <div class="bg-gray-50 rounded-lg p-4 border border-gray-200 hover:border-brand-300 transition group">
+                                <h4 class="font-bold text-gray-800 text-sm mb-1 group-hover:text-brand-600"><i class="fa-brands fa-google text-brand-500 mr-1"></i> Asisten Gemini 1</h4>
+                                <a href="https://gemini.google.com/share/bb9fd22d47b3" target="_blank" class="inline-flex items-center justify-center bg-brand-600 hover:bg-brand-700 text-white font-medium text-xs py-2 px-4 rounded transition w-full shadow-sm mt-2">
+                                    Buka Gemini Tool 1 <i class="fa-solid fa-arrow-up-right-from-bracket ml-1.5 text-[10px]"></i>
+                                </a>
+                            </div>
+
+                            <!-- Gemini Tool 2 -->
+                            <div class="bg-gray-50 rounded-lg p-4 border border-gray-200 hover:border-brand-300 transition group">
+                                <h4 class="font-bold text-gray-800 text-sm mb-1 group-hover:text-brand-600"><i class="fa-brands fa-google text-brand-500 mr-1"></i> Asisten Gemini 2</h4>
+                                <a href="https://gemini.google.com/gem/18v52AOFdYe3xF_vrvHHoe-LMAjdtOHm5?usp=sharing" target="_blank" class="inline-flex items-center justify-center bg-brand-600 hover:bg-brand-700 text-white font-medium text-xs py-2 px-4 rounded transition w-full shadow-sm mt-2">
+                                    Buka Gemini Tool 2 <i class="fa-solid fa-arrow-up-right-from-bracket ml-1.5 text-[10px]"></i>
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- PROFILE & SUPPORT SECTION -->
+                    <div class="bg-white rounded-xl shadow-md border border-gray-100 p-6 text-center">
+                        <img src="https://ui-avatars.com/api/?name=Agus+Triian&background=2563eb&color=fff&size=128" alt="Agus Triian" class="w-20 h-20 rounded-full mx-auto mb-3 shadow-md border-2 border-brand-500 object-cover">
+                        
+                        <h4 class="font-bold text-gray-800">Agustriian</h4>
+                        <p class="text-xs text-gray-500 mb-4">Founder Prompt Kilat</p>
+                        
+                        <div class="flex flex-col space-y-2">
+                            <a href="https://wa.me/6285755643820" target="_blank" class="flex items-center justify-center bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-lg transition text-sm">
+                                <i class="fa-brands fa-whatsapp text-lg mr-2"></i> Chat WhatsApp
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-white border-t border-gray-200 mt-auto">
+            <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-sm text-gray-500">
+                <p>Simpan baik-baik link halaman ini ya, HANYA untuk MEMBER PROMPT KILAT ☺️</p>
+                <p class="mt-2">&copy; 2026 Kelas LMS Prompt Kilat. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- LOGIKA LOGIN & UTILITY SECURITY SCRIPT -->
+    <script>
+        const loginForm = document.getElementById('login-form');
+        const loginScreen = document.getElementById('login-screen');
+        const dashboardScreen = document.getElementById('dashboard-screen');
+        const errorMsg = document.getElementById('error-msg');
+        
+        // Logika Show/Hide Password
+        const togglePasswordBtn = document.getElementById('togglePassword');
+        const passwordInput = document.getElementById('password');
+        const eyeIcon = document.getElementById('eyeIcon');
+
+        togglePasswordBtn.addEventListener('click', function () {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            eyeIcon.classList.toggle('fa-eye');
+            eyeIcon.classList.toggle('fa-eye-slash');
+        });
+        
+        // Kredensial Akses Promkil
+        const validUsername = "bypromkil";
+        const validPassword = "passwordbeli";
+
+        if (sessionStorage.getItem('isLoggedIn') === 'true') showDashboard();
+
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (document.getElementById('username').value === validUsername && document.getElementById('password').value === validPassword) {
+                sessionStorage.setItem('isLoggedIn', 'true');
+                errorMsg.classList.add('hidden');
+                showDashboard();
+            } else {
+                errorMsg.classList.remove('hidden');
+                loginForm.classList.add('shake');
+                setTimeout(() => loginForm.classList.remove('shake'), 400);
+            }
+        });
+
+        function showDashboard() {
+            loginScreen.classList.add('hidden');
+            dashboardScreen.classList.remove('hidden');
+            window.scrollTo(0, 0);
+        }
+
+        function logout() {
+            sessionStorage.removeItem('isLoggedIn');
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            
+            passwordInput.setAttribute('type', 'password');
+            eyeIcon.classList.add('fa-eye');
+            eyeIcon.classList.remove('fa-eye-slash');
+
+            dashboardScreen.classList.add('hidden');
+            loginScreen.classList.remove('hidden');
+        }
+
+        // ==========================================
+        // SCRIPT KEAMANAN (ANTI-INSPECT & PROTEKSI)
+        // ==========================================
+        document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+
+        document.onkeydown = function(e) {
+            if (e.keyCode == 123) return false; // F12
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 73) return false; // Ctrl+Shift+I
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 74) return false; // Ctrl+Shift+J
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 67) return false; // Ctrl+Shift+C
+            if (e.ctrlKey && e.keyCode == 85) return false; // Ctrl+U
+            if (e.ctrlKey && e.keyCode == 83) return false; // Ctrl+S (Save)
+        };
+
+        document.addEventListener('dragstart', function(e) { e.preventDefault(); });
+    </script>
+</body>
+</html>
